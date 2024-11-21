@@ -40,13 +40,27 @@ def running(query_data,output_data,args):
         
         ## get coordinates
         CoordTense = DataTensor[:,[0,1]]
+        GPoint = args.gene_col
+        TypeLevel = args.Type_Level
+        XSize = ColSize
+        YSize = ColSize
+        
+        
+            
+        if TypeLevel in ["g", "c"]:
+            XSize = ColSize if TypeLevel == "g" else GPoint
+            YSize = GPoint if TypeLevel == "g" else XSize
+        else:
+            raise ValueError("Insert correct TypeLevel ('g' or 'c').")
         
         ## need to set by length of x,y 
-        for cell_type in range(2,ColSize):
+        for cell_type in range(2, XSize):
             CellID = cols[cell_type]
 
-            for g1 in range(3,ColSize):
+            for g1 in range(YSize,ColSize):
                     GeneID = cols[g1]
+                    if CellID==GeneID:
+                        continue
                     g_start_time = time.time()
                     
                     ## setted Cuz be x, Res be y.
@@ -101,6 +115,8 @@ def main():
     argparser = argparse.ArgumentParser(description='Spatial-TENET')
     argparser.add_argument("-f", "--file_path", help="Path to the Spatial data for input. should be csv format" ,type = str , required= True)
     argparser.add_argument("-o", "--output_path", help="Path to saved" ,type = str , required= True)
+    argparser.add_argument("-l" , "--Type_Level" , help="causality between 'c' (=Cell to Gene) | 'g' (=Gene to Gene)." , type = str, required = True)
+    argparser.add_argument("-g", "--gene_col" , help="start column of gene." , type=int, default=2)
     argparser.add_argument("-m", "--neighbors", help="number of neighbors. default is 6" ,type = int , default = 6)
     argparser.add_argument("-s", "--symbolizing", help="how symbolize from the raw data. 1 is median , 2 is quantile. (1 is default)" ,type = int, default=1)
     argparser.add_argument("-b", "--bootstrap", help="number of bootstrapping. defatuls is 199" ,type = int , default = 199)
