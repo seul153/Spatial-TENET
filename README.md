@@ -19,21 +19,21 @@ A tool for effectively detecting dependencies between two processes in spatial d
 python run.py -f FILE_PATH -o OUTPUT_PATH [-m NEIGHBORS] [-s SYMBOLIZING] [-b BOOTSTRAP] [-sf SUFFIX]
 ```
 
-* options:   
-&nbsp; -h, --help &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; show this help message and exit<br>
-&nbsp; -f FILE_PATH, --file_path FILE_PATH<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Path to the Spatial data for input. should be csv format <br>
-&nbsp; -o OUTPUT_PATH, --output_path OUTPUT_PATH<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Path to saved<br>
-&nbsp; -l TYPE_LEVEL, --Type_Level TYPE_LEVEL<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; causality between 'c' (=Cell to Gene) | 'g' (=Gene to Gene).<br>
-&nbsp; -g GENE_COL, --gene_col GENE_COL<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; start column of gene.<br>
-&nbsp; -m NEIGHBORS, --neighbors NEIGHBORS<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; number of neighbors. default is 6<br>
-&nbsp; -s SYMBOLIZING, --symbolizing SYMBOLIZING<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; how symbolize from the raw data. 1 is median, 2 is quantile. (1 is default)<br>
-&nbsp; -b BOOTSTRAP, --bootstrap BOOTSTRAP<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; number of bootstrapping. defaults is 199<br>
-&nbsp; -sf SUFFIX, --suffix SUFFIX<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; suffix of output file
+### Configuring Arguments and Parameters
+
+| Short Option | Long Option               | Description                                                          | Default        |
+|--------------|---------------------------|----------------------------------------------------------------------|----------------|
+| `-f`         | `--file_path FILE_PATH`   | Path to the spatial data for input (CSV format).                     | Required       |
+| `-o`         | `--output_path OUTPUT_PATH`| Path to save the output.                                             | Required       |
+| `-l`         | `--Type_Level TYPE_LEVEL` | Specify causality: `'c'` (Cell to Gene) or `'g'` (Gene to Gene).     | Required       |
+| `-g`         | `--gene_col GENE_COL`     | Start column index of gene.                                          | `2`            |
+| `-m`         | `--neighbors NEIGHBORS`   | Number of neighbors to consider.                                     | `6`            |
+| `-s`         | `--symbolizing SYMBOLIZING`| How to symbolize raw data: `1` (median), `2` (quantile).             | `1`            |
+| `-b`         | `--bootstrap BOOTSTRAP`   | Number of bootstrapping iterations.                                  | `199`          |
+| `-sf`        | `--suffix SUFFIX`         | Suffix for output files.                                             | `'causality'`  |
+
+---
+
+### Notes:
+- All required arguments must be specified when executing the script.
+- The default values for optional parameters can be overridden as needed.
