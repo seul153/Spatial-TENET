@@ -111,9 +111,10 @@ def argv(query,ondir,args):
         print('Please check your input-file format.')
     
     End_time = time.time()
+    total_time = End_time - Start_time
     
     print('****** CALCULATION COMPLETE ******')
-    print(f"Total execution time: {End_time - Start_time:.2f} seconds")
+    print("Total execution time: ",total_time ,"seconds")
     
 
 
