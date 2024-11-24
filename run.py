@@ -86,6 +86,8 @@ def running(query_data,output_data,args):
     print("total time: ",end_time-start_time)
     
 def argv(query,ondir,args):
+    Start_time = time.time()
+    
     output_suffix = args.suffix
     
     
@@ -95,7 +97,6 @@ def argv(query,ondir,args):
     if os.path.isdir(query):
         for f in os.listdir(query):
             query_data = os.path.join(query,f)
-            print(query_data)
             output_data = ondir + output_suffix + query_data.split('/')[-1]
             if os.path.isfile(output_data):
                 continue
@@ -108,6 +109,11 @@ def argv(query,ondir,args):
         running(query_data,output_data,args)
     else:
         print('Please check your input-file format.')
+    
+    End_time = time.time()
+    
+    print('****** CALCULATION COMPLETE ******')
+    print(f"Total execution time: {End_time - Start_time:.2f} seconds")
     
 
 
