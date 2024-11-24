@@ -25,6 +25,10 @@ python run.py -f FILE_PATH -o OUTPUT_PATH [-m NEIGHBORS] [-s SYMBOLIZING] [-b BO
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Path to the Spatial data for input. should be csv format <br>
 &nbsp; -o OUTPUT_PATH, --output_path OUTPUT_PATH<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Path to saved<br>
+&nbsp; -l TYPE_LEVEL, --Type_Level TYPE_LEVEL<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; causality between 'c' (=Cell to Gene) | 'g' (=Gene to Gene).<br>
+&nbsp; -g GENE_COL, --gene_col GENE_COL<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; start column of gene.<br>
 &nbsp; -m NEIGHBORS, --neighbors NEIGHBORS<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; number of neighbors. default is 6<br>
 &nbsp; -s SYMBOLIZING, --symbolizing SYMBOLIZING<br>
