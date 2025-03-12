@@ -3,9 +3,10 @@
 # Description:  Running causality code starts from here. 
 # Author:       Seulgi Lee
 # Date:         2024-11-07
-# Version:      2024-11-07
+# Version:      2025-03-10
 # ------------------------------------------------------------------------------
 import os
+os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
 import argparse
 import tools,entropy,output,calc
 import matplotlib
@@ -45,6 +46,7 @@ def running(query_data,output_data,args):
         XSize = ColSize
         YSize = ColSize
         
+        PsiTests = args.pretest
         
             
         if TypeLevel in ["g", "c"]:
@@ -69,8 +71,16 @@ def running(query_data,output_data,args):
                     
                     ## making tensor
                     PairTens = torch.cat((CoordTense, Cuz, Res), dim=1)
-                    
-                    ## Run
+
+
+                    for p in PsiTests:
+                        if p ==1:
+                            pvalue, psi1,n,m=calc.psi1test(PairTens,CellID,GeneID,args)
+                            output.Psitest(output_data+"_psi1-test.csv",CellID,GeneID,psi1,n,m,pvalue)
+                        elif p==2 : 
+                            pvalue, psi2,n,m=calc.psi2test(PairTens,CellID,GeneID,args)
+                            output.Psitest(output_data+"_psi2-test.csv",CellID,GeneID,psi2,n,m,pvalue)
+                            
                     pvalue,YtoX_pvalue,delh,YtoX,n,m = calc.causation(PairTens,CellID,GeneID,args)
                     g_end_time = time.time()
                     print(CellID, " - " ,GeneID, " : gene_pair time ",g_end_time-g_start_time)
@@ -129,6 +139,7 @@ def main():
     argparser.add_argument("-b", "--bootstrap", help="number of bootstrapping. defatuls is 199" ,type = int , default = 199)
     argparser.add_argument("-sf", "--suffix", help="suffix of output file" ,type = str , default = 'causality_GPU_')
     
+    argparser.add_argument("-t", "--pretest", type=int, nargs='+',help='an integer for the accumulator',default= 1)
     args = argparser.parse_args()
     argv(args.file_path , args.output_path , args)
 

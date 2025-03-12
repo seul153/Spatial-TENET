@@ -5,7 +5,7 @@
 #               as a metric for precision improvement on prediction of y by x.
 # Author:       Seulgi Lee
 # Date:         2024-11-07
-# Version:      2024-11-07
+# Version:      2025-03-10
 # ------------------------------------------------------------------------------
 
 
@@ -26,22 +26,6 @@ def hm(s, n):
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     s = s.to(device)
-    
-    def entropy(counts, n):
-        """Helper function to calculate entropy given counts and total number of samples."""
-        
-
-        counts = torch.tensor(counts,dtype = torch.float32).clone().detach().float().to(device)
-        probs = counts / n
-        return (-torch.sum(probs * torch.log(probs)))
-
-    # Use groupby and size to get the counts more efficiently
-    
-    def ClusterCounts(Sub):
-        
-        uniq_rows, ClustCount = torch.unique(Sub,return_counts=True, dim=0)
-        
-        return ClustCount
     
     hyw = entropy(ClusterCounts(s[:,14]),n)
     hyyw = entropy(ClusterCounts(s[:,[12,14]]),n)
@@ -64,4 +48,50 @@ def hm(s, n):
     return delh, ytox
 
 
+def entropy(counts, n):
+    """Helper function to calculate entropy given counts and total number of samples."""
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")    
+    
+    counts = torch.tensor(counts,dtype = torch.float32).clone().detach().float().to(device)
+    probs = counts / n
+    return (-torch.sum(probs * torch.log(probs)))
 
+    # Use groupby and size to get the counts more efficiently
+    
+def ClusterCounts(Sub):
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    uniq_rows, ClustCount = torch.unique(Sub,return_counts=True, dim=0)
+        
+    return ClustCount
+
+
+def hm_xy(s,n): #NewTensor,TensSize
+    entxy =  entropy(ClusterCounts(s[:,[12,11]]),n)
+    return(entxy)
+
+def hm_x(s,n): #NewTensor,TensSize
+    entx =  entropy(ClusterCounts(s[:,[11]]),n)
+    return(entx)
+
+def hm_y(s,n): #NewTensor,TensSize
+    enty =  entropy(ClusterCounts(s[:,[12]]),n)
+    return(enty)
+
+
+def permut(s,n,m): #NewTensor,TensSize
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    s = s.to(device)
+    entxy =  entropy(ClusterCounts(s[:,[12,11]]),n)
+    nxyepk = entxy / n
+
+    def log_comb(n, k):
+        """Compute log of combinations using lgamma function."""
+        n = torch.tensor(n, dtype=torch.float32, device=device)
+        k = torch.tensor(k, dtype=torch.float32, device=device)
+        return torch.lgamma(n + 1) - torch.lgamma(k + 1) - torch.lgamma(n - k + 1)
+
+    permut_value = torch.log(torch.exp(log_comb(m - 1, entxy)))
+    si = torch.sum(nxyepk * permut_value)
+
+    
+    return(si)
