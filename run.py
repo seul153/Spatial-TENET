@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 # Title:        Excecuting Script
 # Description:  Running causality code starts from here. 
-# Author:       Seulgi Lee
+# Author:       Seulgi Lee , Sanaz Panahandeh
 # Date:         2024-11-07
 # Version:      2025-03-10
 # ------------------------------------------------------------------------------
@@ -72,20 +72,32 @@ def running(query_data,output_data,args):
                     ## making tensor
                     PairTens = torch.cat((CoordTense, Cuz, Res), dim=1)
 
+                    PsiCut = False
 
                     for p in PsiTests:
                         if p ==1:
                             pvalue, psi1,n,m=calc.psi1test(PairTens,CellID,GeneID,args)
                             output.Psitest(output_data+"_psi1-test.csv",CellID,GeneID,psi1,n,m,pvalue)
+                            if pvalue >= 0.05:
+                                PsiCut = True
+                                break
+                            #output.Psitest(output_data+"_psi1-test.csv",CellID,GeneID,psi1,n,m,pvalue)
                         elif p==2 : 
                             pvalue, psi2,n,m=calc.psi2test(PairTens,CellID,GeneID,args)
                             output.Psitest(output_data+"_psi2-test.csv",CellID,GeneID,psi2,n,m,pvalue)
+                            if pvalue >= 0.05:
+                                PsiCut = True
+                                break
+                            #output.Psitest(output_data+"_psi2-test.csv",CellID,GeneID,psi2,n,m,pvalue)
+                    if PsiCut == True: 
+                        print(CellID, " - " ,GeneID, 'pretest is not passed')
+                        continue ## if psi test is not passed, skip the causality test.
                             
                     pvalue,YtoX_pvalue,delh,YtoX,n,m = calc.causation(PairTens,CellID,GeneID,args)
                     g_end_time = time.time()
                     print(CellID, " - " ,GeneID, " : gene_pair time ",g_end_time-g_start_time)
                     cuz = 0
-                    
+                        
                     ## check causality between x and y.
                     if pvalue < 0.05 and YtoX_pvalue >=0.05:
                         cuz = 1
@@ -138,7 +150,6 @@ def main():
     argparser.add_argument("-s", "--symbolizing", help="how symbolize from the raw data. 1 is median , 2 is quantile. (1 is default)" ,type = int, default=1)
     argparser.add_argument("-b", "--bootstrap", help="number of bootstrapping. defatuls is 199" ,type = int , default = 199)
     argparser.add_argument("-sf", "--suffix", help="suffix of output file" ,type = str , default = 'causality_GPU_')
-    
     argparser.add_argument("-t", "--pretest", type=int, nargs='+',help='an integer for the accumulator',default= 1)
     args = argparser.parse_args()
     argv(args.file_path , args.output_path , args)

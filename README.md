@@ -16,7 +16,7 @@ A tool for effectively detecting dependencies between two processes in spatial d
 
 #### usage
 ```
-python run.py -f FILE_PATH -o OUTPUT_PATH [-m NEIGHBORS] [-s SYMBOLIZING] [-b BOOTSTRAP] [-sf SUFFIX] [-t --pretest]
+python run.py -f FILE_PATH -o OUTPUT_PATH [-l TYPE_LEVEL] [-g GENE_COL] [-m NEIGHBORS] [-s SYMBOLIZING] [-b BOOTSTRAP] [-sf SUFFIX] [-t --pretest]
 ```
 
 ### Configuring Arguments and Parameters

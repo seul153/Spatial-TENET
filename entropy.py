@@ -3,7 +3,7 @@
 # Description:  This script calculates the conditional entropy with and without the 
 #               info of second variable(x) and passes the difference between them
 #               as a metric for precision improvement on prediction of y by x.
-# Author:       Seulgi Lee
+# Author:       Seulgi Lee, Sanaz Panahandeh
 # Date:         2024-11-07
 # Version:      2025-03-10
 # ------------------------------------------------------------------------------
