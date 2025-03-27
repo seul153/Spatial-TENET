@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 # Title:        Output Files Management Script
 # Description:  ------------
-# Author:       Sanaz Panahandeh , Seulgi Lee
+# Author:       Seulgi Lee, Sanaz Panahandeh
 # Date:         2023-09-01
 # Version:      2025-03-10
 # ------------------------------------------------------------------------------
