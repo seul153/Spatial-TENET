@@ -147,7 +147,7 @@ def main():
     argparser.add_argument("-l" , "--Type_Level" , help="causality between 'c' (=Cell to Gene) | 'g' (=Gene to Gene)." , type = str, required = True)
     argparser.add_argument("-g", "--gene_col" , help="start column of gene." , type=int, default=2)
     argparser.add_argument("-m", "--neighbors", help="number of neighbors. default is 6" ,type = int , default = 6)
-    argparser.add_argument("-s", "--symbolizing", help="how symbolize from the raw data. 1 is median , 2 is quantile. (1 is default)" ,type = int, default=1)
+    argparser.add_argument("-s", "--symbolizing", help="how symbolize from the raw data. 2 is median , 3 is quantile. (2 is default)" ,type = int, default=2)
     argparser.add_argument("-b", "--bootstrap", help="number of bootstrapping. defatuls is 199" ,type = int , default = 199)
     argparser.add_argument("-sf", "--suffix", help="suffix of output file" ,type = str , default = 'causality_GPU_')
     argparser.add_argument("-t", "--pretest", type=int, nargs='+',help='an integer for the accumulator',default= [1])
