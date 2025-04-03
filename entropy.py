@@ -54,6 +54,7 @@ def entropy(counts, n):
     
     counts = torch.tensor(counts,dtype = torch.float32).clone().detach().float().to(device)
     probs = counts / n
+    
     return (-torch.sum(probs * torch.log(probs)))
 
     # Use groupby and size to get the counts more efficiently
@@ -81,8 +82,10 @@ def hm_y(s,n): #NewTensor,TensSize
 def permut(s,n,m): #NewTensor,TensSize
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     s = s.to(device)
-    entxy =  entropy(ClusterCounts(s[:,[12,11]]),n)
-    nxyepk = entxy / n
+    counts = ClusterCounts(s[:, [12, 11]])
+    
+    counts_tensor = torch.tensor(counts, dtype=torch.float32).to(device)
+    probs = counts_tensor / n
 
     def log_comb(n, k):
         """Compute log of combinations using lgamma function."""
@@ -90,8 +93,12 @@ def permut(s,n,m): #NewTensor,TensSize
         k = torch.tensor(k, dtype=torch.float32, device=device)
         return torch.lgamma(n + 1) - torch.lgamma(k + 1) - torch.lgamma(n - k + 1)
 
-    permut_value = torch.log(torch.exp(log_comb(m - 1, entxy)))
-    si = torch.sum(nxyepk * permut_value)
+    #permut_value = torch.log(torch.exp(log_comb(m - 1, counts_tensor)))
+    permut_value = log_comb(m - 1, counts_tensor)
+    # Replace -inf values with 0
+    permut_value = torch.where(torch.isinf(permut_value), torch.tensor(0.0, device=device), permut_value)
+    si = torch.sum(probs * permut_value)
+
 
     
     return(si)
