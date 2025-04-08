@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 # Title:        Tools Box Script
 # Description:  This script contains tools for calculating different things.
-# Author:       Seulgi Lee , Sanaz Panahandeh
+# Author:       Sanaz Panahandeh, Seulgi Lee
 # Date:         2024-11-07
 # Version:      2025-03-10
 # ------------------------------------------------------------------------------

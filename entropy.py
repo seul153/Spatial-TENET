@@ -3,9 +3,9 @@
 # Description:  This script calculates the conditional entropy with and without the 
 #               info of second variable(x) and passes the difference between them
 #               as a metric for precision improvement on prediction of y by x.
-# Author:       Seulgi Lee, Sanaz Panahandeh
+# Author:       Sanaz Panahandeh, Seulgi Lee
 # Date:         2024-11-07
-# Version:      2025-03-10
+# Version:      2025-04-08
 # ------------------------------------------------------------------------------
 
 
@@ -79,26 +79,24 @@ def hm_y(s,n): #NewTensor,TensSize
     return(enty)
 
 
-def permut(s,n,m): #NewTensor,TensSize
+def permut(s, n, m):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     s = s.to(device)
-    counts = ClusterCounts(s[:, [12, 11]])
-    
-    counts_tensor = torch.tensor(counts, dtype=torch.float32).to(device)
-    probs = counts_tensor / n
+
+    uniq_rows, counts = torch.unique(s[:, [12, 11]], return_counts=True, dim=0)
+    probs = counts.to(dtype=torch.float32, device=device) / n
+
+    sigy = uniq_rows[:, 0].to(dtype=torch.float32, device=device)
+    sigx = uniq_rows[:, 1].to(dtype=torch.float32, device=device)
 
     def log_comb(n, k):
         """Compute log of combinations using lgamma function."""
-        n = torch.tensor(n, dtype=torch.float32, device=device)
-        k = torch.tensor(k, dtype=torch.float32, device=device)
+        if not torch.is_tensor(n):
+            n = torch.tensor(n, dtype=torch.float32, device=device)
+        if not torch.is_tensor(k):
+            k = torch.tensor(k, dtype=torch.float32, device=device)
         return torch.lgamma(n + 1) - torch.lgamma(k + 1) - torch.lgamma(n - k + 1)
 
-    #permut_value = torch.log(torch.exp(log_comb(m - 1, counts_tensor)))
-    permut_value = log_comb(m - 1, counts_tensor)
-    # Replace -inf values with 0
-    permut_value = torch.where(torch.isinf(permut_value), torch.tensor(0.0, device=device), permut_value)
-    si = torch.sum(probs * permut_value)
-
-
-    
-    return(si)
+    log_permut = log_comb(m - 1, sigx) + log_comb(m - 1, sigy)
+    si=torch.sum(probs * log_permut)
+    return si
